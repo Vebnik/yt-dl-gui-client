@@ -11,13 +11,20 @@ import {
 } from "@chakra-ui/react";
 import ModalSearchBody from "./ModalSearchBody";
 import {FaVideo} from "react-icons/all";
+import MainApiRoute from "../service/MainApiRoute";
 
 
 const ModalSearch = ({isOpen, onClose, config}) => {
 
 	const download = async () => {
-		await console.log(config)
-		await onClose()
+
+		console.log(config)
+
+		MainApiRoute.downloadVideo(config.url).then(results => {
+			console.log(results)
+			onClose()
+		})
+
 	}
 
 	return (

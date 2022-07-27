@@ -1,6 +1,7 @@
 import {app, BrowserWindow } from 'electron'
 const path = require('path')
 import BrowserWindowConstructorOptions = Electron.BrowserWindowConstructorOptions;
+import ApiHandlers from "./electron/apiBridge/apiHandlers";
 
 
 const startElectron = () => {
@@ -15,7 +16,7 @@ const startElectron = () => {
 			webPreferences: {
 				devTools: true,
 				contextIsolation: true,
-				preload: path.join(__dirname, 'electron', 'preload.js')
+				preload: path.join(__dirname, 'electron', 'apiBridge', 'preload.js')
 			},
 			titleBarOverlay: false,
 			autoHideMenuBar: true,
@@ -29,6 +30,7 @@ const startElectron = () => {
 
 
 	app.on('ready', () => createWindow())
+	app.once('ready', () => {ApiHandlers.ytApiHandlers(); ApiHandlers.userApiHandlers()})
 	app.on('window-all-closed', () => app.quit())
 
 };startElectron()

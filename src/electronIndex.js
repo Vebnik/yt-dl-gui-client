@@ -2,6 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 var electron_1 = require("electron");
 var path = require('path');
+var apiHandlers_1 = require("./electron/apiBridge/apiHandlers");
 var startElectron = function () {
     var createWindow = function () {
         var winOptions = {
@@ -12,7 +13,7 @@ var startElectron = function () {
             webPreferences: {
                 devTools: true,
                 contextIsolation: true,
-                preload: path.join(__dirname, 'electron', 'preload.js')
+                preload: path.join(__dirname, 'electron', 'apiBridge', 'preload.js')
             },
             titleBarOverlay: false,
             autoHideMenuBar: true,
@@ -22,6 +23,7 @@ var startElectron = function () {
             .loadURL('http://localhost:3000').catch(function (err) { return console.error(err); });
     };
     electron_1.app.on('ready', function () { return createWindow(); });
+    electron_1.app.once('ready', function () { apiHandlers_1.default.ytApiHandlers(); apiHandlers_1.default.userApiHandlers(); });
     electron_1.app.on('window-all-closed', function () { return electron_1.app.quit(); });
 };
 startElectron();

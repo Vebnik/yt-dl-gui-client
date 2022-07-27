@@ -3,6 +3,7 @@ import {Box, Icon, Tab, TabList, TabPanel, TabPanels, Tabs} from "@chakra-ui/rea
 import Header from "./Header";
 import DownloadedPage from "./DownloadedPage";
 import {FaCogs, FaDownload, FaSave} from "react-icons/all";
+import SettingPage from "./SettingPage";
 
 const TabsSelector = () => {
 	return (
@@ -18,8 +19,10 @@ const TabsSelector = () => {
 					<DownloadedPage/>
 				</TabPanel>
 				<TabPanel>
-					<Box bg={'gray.700'} h={'100px'} rounded={5}>
-					</Box>
+					<Box bg={'gray.700'} h={'100px'} rounded={5}/>
+				</TabPanel>
+				<TabPanel>
+					<SettingPage/>
 				</TabPanel>
 			</TabPanels>
 		</Tabs>

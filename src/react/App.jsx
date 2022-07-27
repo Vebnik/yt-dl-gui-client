@@ -1,5 +1,5 @@
 import React from 'react';
-import {ChakraProvider, Container, theme, useBreakpointValue, extendTheme, Center, Box} from '@chakra-ui/react';
+import {ChakraProvider, Container, extendTheme} from '@chakra-ui/react';
 import TitleBar from "./components/TitleBar";
 import TabsSelector from "./components/TabsSelector";
 
@@ -31,4 +31,4 @@ const App = () => {
 	);
 }
 
-export default App;
+export default React.memo(App);

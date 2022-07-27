@@ -3,6 +3,7 @@ import {Box, Icon, IconButton, Input, InputGroup, InputLeftElement, useDisclosur
 import {FaLink, FaSearch} from "react-icons/all";
 import ModalSearch from "./ModalSearch";
 import {dataSearch} from "../react-utils/downloadModelTest";
+import MainApiRoute from "../service/MainApiRoute";
 
 const Header = () => {
 
@@ -11,9 +12,11 @@ const Header = () => {
 	const { isOpen, onOpen, onClose } = useDisclosure()
 
 	const search = async () => {
-		await setData(dataSearch)
-		await onOpen()
-		await setValue('')
+		MainApiRoute.searchVideo(value).then(async dataSearch => {
+			await setData(dataSearch)
+			await onOpen()
+			await setValue('')
+		})
 	}
 
 	return (

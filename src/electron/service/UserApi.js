@@ -38,6 +38,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var electron_1 = require("electron");
 var DataModel = require("../database/dataModel");
+var child_process = require("child_process");
 var UserApi = /** @class */ (function () {
     function UserApi() {
     }
@@ -61,13 +62,16 @@ var UserApi = /** @class */ (function () {
                                                 return [4 /*yield*/, User.findOne({ where: { id: 1 } })];
                                             case 2:
                                                 user = _a.sent();
-                                                return [4 /*yield*/, user.update({
-                                                        savePath: value.filePaths[0]
-                                                    })];
+                                                if (!user) return [3 /*break*/, 4];
+                                                return [4 /*yield*/, user.update({ savePath: value.filePaths[0] })];
                                             case 3:
                                                 _a.sent();
+                                                _a.label = 4;
+                                            case 4: return [4 /*yield*/, User.create({ savePath: value.filePaths[0] })];
+                                            case 5:
+                                                _a.sent();
                                                 return [4 /*yield*/, User.sync({ alter: true })];
-                                            case 4:
+                                            case 6:
                                                 _a.sent();
                                                 resolve({ ok: true, message: value.filePaths, meta: value });
                                                 return [2 /*return*/];
@@ -87,9 +91,32 @@ var UserApi = /** @class */ (function () {
             });
         });
     };
+    UserApi.prototype.openSavePath = function () {
+        return __awaiter(this, void 0, void 0, function () {
+            var User, user, err_1;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        _a.trys.push([0, 3, , 4]);
+                        return [4 /*yield*/, DataModel.getUserModel()];
+                    case 1:
+                        User = _a.sent();
+                        return [4 /*yield*/, User.findOne({ where: { id: 1 } })];
+                    case 2:
+                        user = _a.sent();
+                        child_process.exec("explorer " + user.dataValues.savePath);
+                        return [2 /*return*/, { ok: true, message: 'Open dir' }];
+                    case 3:
+                        err_1 = _a.sent();
+                        return [2 /*return*/, { ok: false, message: err_1 }];
+                    case 4: return [2 /*return*/];
+                }
+            });
+        });
+    };
     UserApi.prototype.getUserConfig = function () {
         return __awaiter(this, void 0, void 0, function () {
-            var User, config, err_1;
+            var User, config, err_2;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
@@ -106,8 +133,8 @@ var UserApi = /** @class */ (function () {
                                 savePath: 'no deffer savePath'
                             }];
                     case 3:
-                        err_1 = _a.sent();
-                        console.error(err_1);
+                        err_2 = _a.sent();
+                        console.error(err_2);
                         return [3 /*break*/, 4];
                     case 4: return [2 /*return*/];
                 }

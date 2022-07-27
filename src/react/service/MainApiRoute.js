@@ -5,11 +5,19 @@ class MainApiRoute {
 	}
 
 	async downloadVideo(url) {
-		return await window.YTApi.download({ url })
+		return await window.YTApi.download(url)
+	}
+
+	async getHistory() {
+		return await window.YTApi.getHistory()
 	}
 
 	async savePath() {
 		return await window.UserApi.savePath()
+	}
+
+	async openSavePath() {
+		return await window.UserApi.openSavePath()
 	}
 
 	async getUserConfig() {

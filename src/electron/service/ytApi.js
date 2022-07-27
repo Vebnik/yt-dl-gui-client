@@ -37,9 +37,10 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var ytdl_core_1 = require("ytdl-core");
-var electron_1 = require("electron");
 var fs = require("fs");
 var path = require("path");
+var dayjs = require('dayjs');
+var DataModel = require("../database/dataModel");
 var YtApi = /** @class */ (function () {
     function YtApi() {
     }
@@ -50,15 +51,20 @@ var YtApi = /** @class */ (function () {
                 switch (_a.label) {
                     case 0:
                         prom = new Promise(function (resolve) {
-                            (0, ytdl_core_1.getInfo)(url).then(function (videoInfo) {
+                            (0, ytdl_core_1.getInfo)(url)
+                                .then(function (videoInfo) {
                                 resolve({
                                     url: videoInfo.videoDetails.video_url,
                                     title: videoInfo.videoDetails.title,
                                     duration: (+videoInfo.videoDetails.lengthSeconds / 60).toFixed(2).toString(),
-                                    thumbnail: videoInfo.videoDetails.thumbnails[0].url,
-                                    searchDate: new Date().toISOString()
+                                    thumbnail: videoInfo.videoDetails.thumbnails.at(-1).url,
+                                    searchDate: dayjs().toString(),
+                                    published: videoInfo.videoDetails.viewCount,
+                                    author: videoInfo.videoDetails.author.name,
                                 });
-                            });
+                            })
+                                // @ts-ignore
+                                .catch(function (err) { return resolve({ ok: false, message: err }); });
                         });
                         return [4 /*yield*/, Promise.all([prom])];
                     case 1:
@@ -68,30 +74,88 @@ var YtApi = /** @class */ (function () {
             });
         });
     };
-    YtApi.prototype.download = function (url) {
+    YtApi.prototype.download = function (option) {
         return __awaiter(this, void 0, void 0, function () {
             var prom;
+            var _this = this;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
-                        prom = new Promise(function (resolve) {
-                            try {
-                                (0, ytdl_core_1.getInfo)(url).then(function (videoInfo) {
-                                    electron_1.dialog.showSaveDialog({ properties: ['showHiddenFiles', 'createDirectory'] }).then(function (value) {
-                                        (0, ytdl_core_1.downloadFromInfo)(videoInfo, { filter: 'videoandaudio', quality: 'highest' })
-                                            .pipe(fs.createWriteStream(path.join(value.filePath + ".mp4")));
-                                    });
-                                    resolve({ ok: true, message: 'start download' });
-                                });
-                            }
-                            catch (err) {
-                                resolve({ ok: false, message: err });
-                            }
-                        });
+                        prom = new Promise(function (resolve) { return __awaiter(_this, void 0, void 0, function () {
+                            var User, Video_1, config_1, err_1;
+                            var _this = this;
+                            return __generator(this, function (_a) {
+                                switch (_a.label) {
+                                    case 0:
+                                        _a.trys.push([0, 5, , 6]);
+                                        return [4 /*yield*/, DataModel.getUserModel()];
+                                    case 1:
+                                        User = _a.sent();
+                                        return [4 /*yield*/, DataModel.getVideoModel()];
+                                    case 2:
+                                        Video_1 = _a.sent();
+                                        return [4 /*yield*/, User.findAll()];
+                                    case 3:
+                                        config_1 = _a.sent();
+                                        return [4 /*yield*/, (0, ytdl_core_1.getInfo)(option.url).then(function (videoInfo) { return __awaiter(_this, void 0, void 0, function () {
+                                                return __generator(this, function (_a) {
+                                                    switch (_a.label) {
+                                                        case 0: return [4 /*yield*/, Video_1.create({
+                                                                title: videoInfo.videoDetails.title,
+                                                                url: videoInfo.videoDetails.video_url,
+                                                                duration: videoInfo.videoDetails.lengthSeconds,
+                                                                savePath: config_1[0].dataValues.savePath,
+                                                                thumbnail: videoInfo.videoDetails.thumbnails.at(-1).url,
+                                                            })];
+                                                        case 1:
+                                                            _a.sent();
+                                                            return [4 /*yield*/, Video_1.sync({ alter: true })];
+                                                        case 2:
+                                                            _a.sent();
+                                                            (0, ytdl_core_1.downloadFromInfo)(videoInfo, { quality: option.filter })
+                                                                .pipe(fs.createWriteStream(path.join(config_1[0].dataValues.savePath, videoInfo.videoDetails.title + ".mp4")));
+                                                            resolve({ ok: true, message: 'start download' });
+                                                            return [2 /*return*/];
+                                                    }
+                                                });
+                                            }); })];
+                                    case 4:
+                                        _a.sent();
+                                        return [3 /*break*/, 6];
+                                    case 5:
+                                        err_1 = _a.sent();
+                                        resolve({ ok: false, message: err_1 });
+                                        return [3 /*break*/, 6];
+                                    case 6: return [2 /*return*/];
+                                }
+                            });
+                        }); });
                         return [4 /*yield*/, Promise.all([prom])];
                     case 1:
                         _a.sent();
                         return [2 /*return*/, prom];
+                }
+            });
+        });
+    };
+    YtApi.prototype.getHistory = function () {
+        return __awaiter(this, void 0, void 0, function () {
+            var Video, allVideo, err_2;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        _a.trys.push([0, 3, , 4]);
+                        return [4 /*yield*/, DataModel.getVideoModel()];
+                    case 1:
+                        Video = _a.sent();
+                        return [4 /*yield*/, Video.findAll()];
+                    case 2:
+                        allVideo = _a.sent();
+                        return [2 /*return*/, { ok: true, message: allVideo }];
+                    case 3:
+                        err_2 = _a.sent();
+                        return [2 /*return*/, { ok: false, message: err_2 }];
+                    case 4: return [2 /*return*/];
                 }
             });
         });

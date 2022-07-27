@@ -10,7 +10,7 @@ const DownloadModel = ({config}) => {
 		<Box p={2} w={'100%'} rounded={5} bg={'gray.700'} fontSize={'18px'} color={'gray.300'} display={'flex'} flexDirection={'column'}>
 			<Box display={'flex'} justifyContent={'space-between'} alignItems={'center'} flexDirection={'row'}>
 				<Box>
-					<Text noOfLines={[1, 2, 3]} m={1} borderBottom={'1px'} w={'max-content'}>
+					<Text noOfLines={1} m={1} borderBottom={'1px'} w={'max-content'}>
 						{config.title}
 					</Text>
 					<Badge colorScheme={'red'} w={'max-content'} m={1}>
@@ -24,7 +24,7 @@ const DownloadModel = ({config}) => {
 				<Image rounded={5} width={'100px'} name='Thumbnail' src={config.thumbnail} />
 				<IconButton color={'red.600'} fontSize={'30px'} icon={<Icon as={FaYoutube}/>} aria-label={'open source'} width={"max-content"}/>
 			</Box>
-			<Progress value={20} size='xs' colorScheme='green' rounded={5}/>
+			<Progress value={100} size='xs' colorScheme='green' rounded={5}/>
 		</Box>
 	);
 };

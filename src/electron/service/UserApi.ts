@@ -1,6 +1,7 @@
 import { dialog } from 'electron'
 import {Model} from "sequelize";
 const DataModel = require("../database/dataModel");
+import * as child_process from "child_process";
 
 
 class UserApi {
@@ -14,9 +15,12 @@ class UserApi {
 
 						const User = await DataModel.getUserModel()
 						const user = await User.findOne({where: {id: 1}})
-						await user.update({
-							savePath: value.filePaths[0]
-						})
+
+						if (user) {
+							await user.update({savePath: value.filePaths[0]})
+						}
+
+						await User.create({savePath: value.filePaths[0]})
 						await User.sync({alter: true})
 
 						resolve({ok: true, message: value.filePaths, meta: value})
@@ -28,6 +32,20 @@ class UserApi {
 
 		await Promise.all([prom])
 		return prom
+	}
+
+	async openSavePath(): Promise<Object> {
+
+		try {
+			const User = await DataModel.getUserModel()
+			const user = await User.findOne({where: {id: 1}})
+			child_process.exec(`explorer ${user.dataValues.savePath}`)
+
+			return {ok: true, message: 'Open dir'}
+		} catch (err) {
+			return {ok: false, message: err}
+		}
+
 	}
 
 	async getUserConfig(): Promise<object> {

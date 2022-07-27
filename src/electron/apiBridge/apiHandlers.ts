@@ -1,6 +1,6 @@
 import { ipcMain } from 'electron'
 import IpcMainInvokeEvent = Electron.IpcMainInvokeEvent;
-import {ytSearch} from "../namespace/ytModel";
+import {ytSearch, downloadOption} from "../namespace/ytModel";
 import YtApi from "../service/ytApi";
 import UserApi from "../service/UserApi";
 
@@ -12,8 +12,12 @@ class ApiHandlers{
 			return await YtApi.getInfo(args.url)
 		})
 
-		ipcMain.handle('download', async (event: IpcMainInvokeEvent, args: ytSearch) => {
-			return await YtApi.download(args.url)
+		ipcMain.handle('download', async (event: IpcMainInvokeEvent, args: downloadOption) => {
+			return await YtApi.download(args)
+		})
+
+		ipcMain.handle('getHistory', async (event: IpcMainInvokeEvent, args: any) => {
+			return await YtApi.getHistory()
 		})
 	}
 
@@ -22,9 +26,14 @@ class ApiHandlers{
 			return await UserApi.savePath()
 		})
 
+		ipcMain.handle('openSavePath', async (event: IpcMainInvokeEvent, args: any) => {
+			return await UserApi.openSavePath()
+		})
+
 		ipcMain.handle('getUserConfig', async (event: IpcMainInvokeEvent, args: any) => {
 			return await UserApi.getUserConfig()
 		})
+
 	}
 }
 

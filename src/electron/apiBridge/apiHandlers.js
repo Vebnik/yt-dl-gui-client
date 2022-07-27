@@ -55,7 +55,15 @@ var ApiHandlers = /** @class */ (function () {
         electron_1.ipcMain.handle('download', function (event, args) { return __awaiter(_this, void 0, void 0, function () {
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, ytApi_1.default.download(args.url)];
+                    case 0: return [4 /*yield*/, ytApi_1.default.download(args)];
+                    case 1: return [2 /*return*/, _a.sent()];
+                }
+            });
+        }); });
+        electron_1.ipcMain.handle('getHistory', function (event, args) { return __awaiter(_this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, ytApi_1.default.getHistory()];
                     case 1: return [2 /*return*/, _a.sent()];
                 }
             });
@@ -67,6 +75,14 @@ var ApiHandlers = /** @class */ (function () {
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0: return [4 /*yield*/, UserApi_1.default.savePath()];
+                    case 1: return [2 /*return*/, _a.sent()];
+                }
+            });
+        }); });
+        electron_1.ipcMain.handle('openSavePath', function (event, args) { return __awaiter(_this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, UserApi_1.default.openSavePath()];
                     case 1: return [2 /*return*/, _a.sent()];
                 }
             });

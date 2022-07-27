@@ -27,7 +27,7 @@ const App = () => {
 
 	const getConfig = () => {
 		MainApiRoute.getUserConfig().then(data => {
-			console.log(data)
+			localStorage.setItem('savePath', data.dataValues.savePath)
 			store.setUser(data.dataValues)
 		})
 	}; getConfig()

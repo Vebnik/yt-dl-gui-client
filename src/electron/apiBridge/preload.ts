@@ -8,4 +8,5 @@ contextBridge.exposeInMainWorld('YTApi', {
 
 contextBridge.exposeInMainWorld('UserApi', {
 	savePath: (args: any) => ipcRenderer.invoke('savePath', args),
+	getUserConfig: (args: any) => ipcRenderer.invoke('getUserConfig', args),
 })

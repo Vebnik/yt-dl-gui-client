@@ -37,19 +37,43 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var electron_1 = require("electron");
+var DataModel = require("../database/dataModel");
 var UserApi = /** @class */ (function () {
     function UserApi() {
     }
     UserApi.prototype.savePath = function () {
         return __awaiter(this, void 0, void 0, function () {
             var prom;
+            var _this = this;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
                         prom = new Promise(function (resolve) {
                             try {
                                 electron_1.dialog.showOpenDialog({ title: 'save path', properties: ['openDirectory'] })
-                                    .then(function (value) { return resolve({ ok: true, message: value.filePaths, meta: value }); });
+                                    .then(function (value) { return __awaiter(_this, void 0, void 0, function () {
+                                    var User, user;
+                                    return __generator(this, function (_a) {
+                                        switch (_a.label) {
+                                            case 0: return [4 /*yield*/, DataModel.getUserModel()];
+                                            case 1:
+                                                User = _a.sent();
+                                                return [4 /*yield*/, User.findOne({ where: { id: 1 } })];
+                                            case 2:
+                                                user = _a.sent();
+                                                return [4 /*yield*/, user.update({
+                                                        savePath: value.filePaths[0]
+                                                    })];
+                                            case 3:
+                                                _a.sent();
+                                                return [4 /*yield*/, User.sync({ alter: true })];
+                                            case 4:
+                                                _a.sent();
+                                                resolve({ ok: true, message: value.filePaths, meta: value });
+                                                return [2 /*return*/];
+                                        }
+                                    });
+                                }); });
                             }
                             catch (err) {
                                 resolve({ ok: false, message: err });
@@ -59,6 +83,33 @@ var UserApi = /** @class */ (function () {
                     case 1:
                         _a.sent();
                         return [2 /*return*/, prom];
+                }
+            });
+        });
+    };
+    UserApi.prototype.getUserConfig = function () {
+        return __awaiter(this, void 0, void 0, function () {
+            var User, config, err_1;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        _a.trys.push([0, 3, , 4]);
+                        return [4 /*yield*/, DataModel.getUserModel()];
+                    case 1:
+                        User = _a.sent();
+                        return [4 /*yield*/, User.findAll()];
+                    case 2:
+                        config = _a.sent();
+                        if (config.length)
+                            return [2 /*return*/, config[0]];
+                        return [2 /*return*/, {
+                                savePath: 'no deffer savePath'
+                            }];
+                    case 3:
+                        err_1 = _a.sent();
+                        console.error(err_1);
+                        return [3 /*break*/, 4];
+                    case 4: return [2 /*return*/];
                 }
             });
         });

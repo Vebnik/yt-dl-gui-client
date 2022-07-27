@@ -3,7 +3,7 @@ import {makeAutoObservable} from "mobx";
 class GlobalStore {
 
 	user = {
-		path: 'deffer path'
+		savePath: ''
 	}
 
 	constructor() {

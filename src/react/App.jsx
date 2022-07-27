@@ -1,7 +1,9 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import {ChakraProvider, Container, extendTheme} from '@chakra-ui/react';
 import TitleBar from "./components/TitleBar";
 import TabsSelector from "./components/TabsSelector";
+import MainApiRoute from "./service/MainApiRoute";
+import {Context} from "../index";
 
 const myTheme = extendTheme({
 	styles: {
@@ -20,6 +22,15 @@ const myTheme = extendTheme({
 })
 
 const App = () => {
+
+	const {store} = useContext(Context)
+
+	const getConfig = () => {
+		MainApiRoute.getUserConfig().then(data => {
+			console.log(data)
+			store.setUser(data.dataValues)
+		})
+	}; getConfig()
 
 	return (
 		<ChakraProvider theme={myTheme}>

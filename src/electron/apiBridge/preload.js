@@ -7,4 +7,5 @@ electron_1.contextBridge.exposeInMainWorld('YTApi', {
 });
 electron_1.contextBridge.exposeInMainWorld('UserApi', {
     savePath: function (args) { return electron_1.ipcRenderer.invoke('savePath', args); },
+    getUserConfig: function (args) { return electron_1.ipcRenderer.invoke('getUserConfig', args); },
 });

@@ -11,6 +11,10 @@ class MainApiRoute {
 	async savePath() {
 		return await window.UserApi.savePath()
 	}
+
+	async getUserConfig() {
+		return await window.UserApi.getUserConfig()
+	}
 }
 
 export default new MainApiRoute()

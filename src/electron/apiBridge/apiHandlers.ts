@@ -4,6 +4,7 @@ import {ytSearch} from "../namespace/ytModel";
 import YtApi from "../service/ytApi";
 import UserApi from "../service/UserApi";
 
+
 class ApiHandlers{
 
 	ytApiHandlers() {
@@ -19,6 +20,10 @@ class ApiHandlers{
 	userApiHandlers() {
 		ipcMain.handle('savePath', async (event: IpcMainInvokeEvent, args: any) => {
 			return await UserApi.savePath()
+		})
+
+		ipcMain.handle('getUserConfig', async (event: IpcMainInvokeEvent, args: any) => {
+			return await UserApi.getUserConfig()
 		})
 	}
 }

@@ -10,4 +10,6 @@ electron_1.contextBridge.exposeInMainWorld('UserApi', {
     savePath: function (args) { return electron_1.ipcRenderer.invoke('savePath', args); },
     openSavePath: function (args) { return electron_1.ipcRenderer.invoke('openSavePath', args); },
     getUserConfig: function (args) { return electron_1.ipcRenderer.invoke('getUserConfig', args); },
+    childProcExec: function (args) { return electron_1.ipcRenderer.invoke('childProcExec', args); },
+    windowDrive: function (args) { return electron_1.ipcRenderer.invoke('windowDrive', args); },
 });

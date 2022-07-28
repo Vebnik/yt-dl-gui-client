@@ -141,6 +141,34 @@ var UserApi = /** @class */ (function () {
             });
         });
     };
+    UserApi.prototype.childProcExec = function (args) {
+        return __awaiter(this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                child_process.exec(args);
+                return [2 /*return*/];
+            });
+        });
+    };
+    UserApi.prototype.windowDrive = function (driveType) {
+        return __awaiter(this, void 0, void 0, function () {
+            var win;
+            return __generator(this, function (_a) {
+                win = electron_1.BrowserWindow.getFocusedWindow();
+                switch (driveType) {
+                    case 'minimize':
+                        win.minimize();
+                        break;
+                    case 'maximize':
+                        win.maximize();
+                        break;
+                    case 'close':
+                        win.close();
+                        break;
+                }
+                return [2 /*return*/];
+            });
+        });
+    };
     return UserApi;
 }());
 exports.default = new UserApi();

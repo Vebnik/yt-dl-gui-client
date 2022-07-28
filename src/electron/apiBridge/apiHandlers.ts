@@ -34,6 +34,13 @@ class ApiHandlers{
 			return await UserApi.getUserConfig()
 		})
 
+		ipcMain.handle('childProcExec', async (event: IpcMainInvokeEvent, args: string) => {
+			return await UserApi.childProcExec(args)
+		})
+
+		ipcMain.handle('windowDrive', async (event: IpcMainInvokeEvent, args: string) => {
+			return await UserApi.windowDrive(args)
+		})
 	}
 }
 

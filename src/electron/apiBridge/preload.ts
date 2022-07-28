@@ -11,4 +11,6 @@ contextBridge.exposeInMainWorld('UserApi', {
 	savePath: (args: any) => ipcRenderer.invoke('savePath', args),
 	openSavePath: (args: any) => ipcRenderer.invoke('openSavePath', args),
 	getUserConfig: (args: any) => ipcRenderer.invoke('getUserConfig', args),
+	childProcExec: (args: string) => ipcRenderer.invoke('childProcExec', args),
+	windowDrive: (args: string) => ipcRenderer.invoke('windowDrive', args),
 })

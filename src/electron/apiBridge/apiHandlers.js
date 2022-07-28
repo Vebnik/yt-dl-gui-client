@@ -95,6 +95,22 @@ var ApiHandlers = /** @class */ (function () {
                 }
             });
         }); });
+        electron_1.ipcMain.handle('childProcExec', function (event, args) { return __awaiter(_this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, UserApi_1.default.childProcExec(args)];
+                    case 1: return [2 /*return*/, _a.sent()];
+                }
+            });
+        }); });
+        electron_1.ipcMain.handle('windowDrive', function (event, args) { return __awaiter(_this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, UserApi_1.default.windowDrive(args)];
+                    case 1: return [2 /*return*/, _a.sent()];
+                }
+            });
+        }); });
     };
     return ApiHandlers;
 }());

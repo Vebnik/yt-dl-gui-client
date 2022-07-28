@@ -1,11 +1,18 @@
 import React from 'react';
 import {Avatar, Badge, Box, Icon, IconButton, Image, Progress, SimpleGrid, Text, Wrap} from "@chakra-ui/react";
 import {FaYoutube} from "react-icons/all";
+import MainApiRoute from "../service/MainApiRoute";
 
 
 //TODO вспылвающее окно при начале скачивания видео, модальное окно с инфой о видео
 
 const DownloadModel = ({config}) => {
+
+	const openSource = () => {
+		MainApiRoute.childProcExec(`explorer "${config.url}"`)
+			.catch(err => console.error(err))
+	}
+
 	return (
 		<Box p={2} w={'100%'} rounded={5} bg={'gray.700'} fontSize={'18px'} color={'gray.300'} display={'flex'} flexDirection={'column'}>
 			<Box display={'flex'} justifyContent={'space-between'} alignItems={'center'} flexDirection={'row'}>
@@ -14,7 +21,7 @@ const DownloadModel = ({config}) => {
 						{config.title}
 					</Text>
 					<Badge colorScheme={'red'} w={'max-content'} m={1}>
-						{config.duration} Min
+						{(config.duration/60).toFixed(2)} Min
 					</Badge>
 					<Badge colorScheme={'green'} w={'max-content'} m={1}>
 						{config.dateAtDownload}
@@ -22,7 +29,7 @@ const DownloadModel = ({config}) => {
 				</Box>
 				<Wrap w={'10%'}/>
 				<Image rounded={5} width={'100px'} name='Thumbnail' src={config.thumbnail} />
-				<IconButton color={'red.600'} fontSize={'30px'} icon={<Icon as={FaYoutube}/>} aria-label={'open source'} width={"max-content"}/>
+				<IconButton onClick={openSource} color={'red.600'} fontSize={'30px'} icon={<Icon as={FaYoutube}/>} aria-label={'open source'} width={"max-content"}/>
 			</Box>
 			<Progress value={100} size='xs' colorScheme='green' rounded={5}/>
 		</Box>

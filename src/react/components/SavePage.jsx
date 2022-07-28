@@ -1,10 +1,12 @@
-import React, {useState} from 'react';
+import React, {useMemo, useState} from "react";
 import {Box, SimpleGrid, useBreakpointValue} from "@chakra-ui/react";
+import MainApiRoute from "../service/MainApiRoute";
 import DownloadModel from "./DownloadModel";
 
-const DownloadedPage = () => {
+// TODO Подгрузка списка скаченых видео при клике по вкладкам и работа с кнопками контроля окна
 
-	const [element, setElement] = useState([])
+const SavePage = ({element}) => {
+
 	const variant = useBreakpointValue({ base: 1, md: 2 })
 
 	return (
@@ -18,4 +20,4 @@ const DownloadedPage = () => {
 	)
 }
 
-export default DownloadedPage;
+export default SavePage

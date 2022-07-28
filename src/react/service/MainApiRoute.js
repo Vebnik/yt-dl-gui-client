@@ -23,6 +23,14 @@ class MainApiRoute {
 	async getUserConfig() {
 		return await window.UserApi.getUserConfig()
 	}
+
+	async childProcExec(args) {
+		return await window.UserApi.childProcExec(args)
+	}
+
+	async windowDrive(driveType) {
+		return await window.UserApi.windowDrive(driveType)
+	}
 }
 
 export default new MainApiRoute()

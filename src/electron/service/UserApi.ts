@@ -1,4 +1,4 @@
-import { dialog } from 'electron'
+import { dialog, app, BrowserWindow } from 'electron'
 import {Model} from "sequelize";
 const DataModel = require("../database/dataModel");
 import * as child_process from "child_process";
@@ -66,6 +66,22 @@ class UserApi {
 		}
 	}
 
+	async childProcExec(args: string): Promise<void> {
+		child_process.exec(args)
+	}
+
+	async windowDrive(driveType: string) {
+		const win = BrowserWindow.getFocusedWindow()
+
+		switch (driveType) {
+			case 'minimize': win.minimize()
+				break
+			case 'maximize': win.maximize()
+				break
+			case 'close': win.close()
+				break
+		}
+	}
 }
 
 export default new UserApi()

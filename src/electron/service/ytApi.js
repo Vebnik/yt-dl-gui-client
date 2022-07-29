@@ -37,12 +37,17 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var ytdl_core_1 = require("ytdl-core");
+var electron_1 = require("electron");
 var fs = require("fs");
 var path = require("path");
+var cp = require("child_process");
 var dayjs = require('dayjs');
+var ffmpeg = require('ffmpeg-static');
 var DataModel = require("../database/dataModel");
 var YtApi = /** @class */ (function () {
     function YtApi() {
+        // Private
+        this.processDownload = new Map();
     }
     YtApi.prototype.getInfo = function (url) {
         return __awaiter(this, void 0, void 0, function () {
@@ -112,6 +117,10 @@ var YtApi = /** @class */ (function () {
                                                             return [4 /*yield*/, Video_1.sync({ alter: true })];
                                                         case 2:
                                                             _a.sent();
+                                                            if (option.filter === 'highest') {
+                                                                resolve({ ok: true, message: 'start download' });
+                                                                return [2 /*return*/, this.streamDownload(videoInfo, config_1)];
+                                                            }
                                                             (0, ytdl_core_1.downloadFromInfo)(videoInfo, { quality: option.filter })
                                                                 .pipe(fs.createWriteStream(path.join(config_1[0].dataValues.savePath, videoInfo.videoDetails.title + ".mp4")));
                                                             resolve({ ok: true, message: 'start download' });
@@ -157,6 +166,74 @@ var YtApi = /** @class */ (function () {
                         return [2 /*return*/, { ok: false, message: err_2 }];
                     case 4: return [2 /*return*/];
                 }
+            });
+        });
+    };
+    YtApi.prototype.streamDownload = function (videoInfo, config) {
+        return __awaiter(this, void 0, void 0, function () {
+            var downloadData_1, audio, video, ffmpegMerge;
+            var _this = this;
+            return __generator(this, function (_a) {
+                try {
+                    downloadData_1 = {
+                        audio: { downloaded: 0, total: 0 },
+                        video: { downloaded: 0, total: 0 },
+                    };
+                    console.log(path.join(config[0].dataValues.savePath, videoInfo.videoDetails.title + ".mkv"));
+                    audio = (0, ytdl_core_1.downloadFromInfo)(videoInfo, { quality: 'highestaudio' })
+                        .on('progress', function (_, downloaded, total) {
+                        downloadData_1.audio = { downloaded: downloaded, total: total };
+                    });
+                    video = (0, ytdl_core_1.downloadFromInfo)(videoInfo, { quality: 'highestvideo' })
+                        .on('progress', function (_, downloaded, total) {
+                        downloadData_1.video = { downloaded: downloaded, total: total };
+                    });
+                    ffmpegMerge = cp.spawn(ffmpeg, [
+                        '-loglevel', '8', '-hide_banner',
+                        '-progress', 'pipe:3',
+                        '-i', 'pipe:4',
+                        '-i', 'pipe:5',
+                        '-map', '0:a',
+                        '-map', '1:v',
+                        '-c:v', 'copy',
+                        path.join(config[0].dataValues.savePath, videoInfo.videoDetails.channelId + ".mkv"),
+                    ], {
+                        windowsHide: true,
+                        stdio: [
+                            'inherit', 'inherit', 'inherit',
+                            'pipe', 'pipe', 'pipe',
+                        ]
+                    });
+                    ffmpegMerge.on('close', function () {
+                        _this.processDownload.delete(videoInfo.videoDetails.video_url);
+                        if (!_this.processDownload.size)
+                            electron_1.BrowserWindow.getAllWindows()[0]
+                                .webContents.send('getCurrentDownload', []);
+                        console.log('done');
+                    });
+                    ffmpegMerge.stdio[3].on('data', function (chunk) {
+                        var linesArr = chunk.toString().trim().split('\n');
+                        var args = {};
+                        for (var _i = 0, linesArr_1 = linesArr; _i < linesArr_1.length; _i++) {
+                            var info = linesArr_1[_i];
+                            var _a = info.split('='), key = _a[0], value = _a[1];
+                            args[key.trim()] = value;
+                        }
+                        var totalPercent = {
+                            audio: (downloadData_1.audio.downloaded / (downloadData_1.audio.total / 100)).toFixed(2),
+                            video: (downloadData_1.video.downloaded / (downloadData_1.video.total / 100)).toFixed(2),
+                        };
+                        _this.processDownload.set(videoInfo.videoDetails.video_url, { totalPercent: totalPercent, info: videoInfo.videoDetails });
+                        electron_1.BrowserWindow.getAllWindows()[0]
+                            .webContents.send('getCurrentDownload', Array.from(_this.processDownload.values()));
+                    });
+                    audio.pipe(ffmpegMerge.stdio[4]);
+                    video.pipe(ffmpegMerge.stdio[5]);
+                }
+                catch (err) {
+                    return [2 /*return*/, { ok: false, message: err }];
+                }
+                return [2 /*return*/];
             });
         });
     };

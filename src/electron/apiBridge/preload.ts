@@ -5,6 +5,7 @@ contextBridge.exposeInMainWorld('YTApi', {
 	search: (args: ytSearch) => ipcRenderer.invoke('search', args),
 	download: (args: ytSearch) => ipcRenderer.invoke('download', args),
 	getHistory: (args: any) => ipcRenderer.invoke('getHistory', args),
+	getDownload: (args: any) => ipcRenderer.on('getCurrentDownload', args),
 })
 
 contextBridge.exposeInMainWorld('UserApi', {

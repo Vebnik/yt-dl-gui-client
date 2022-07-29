@@ -30,7 +30,7 @@ const TabsSelector = () => {
 					<Header/>
 					<DownloadedPage/>
 				</TabPanel>
-				<TabPanel>
+				<TabPanel justifyContent={'center'} alignItems={'center'} display={'flex'} flexDirection={'column'}>
 					<SavePage element={element}/>
 				</TabPanel>
 				<TabPanel>

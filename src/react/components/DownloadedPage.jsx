@@ -8,6 +8,7 @@ const DownloadedPage = () => {
 	const variant = useBreakpointValue({ base: 1, md: 2 })
 
 	useMemo(() => {
+		console.log('rendered DownloadedPage')
 		window.YTApi.getDownload((ev, args) => { setElement(args) })
 	}, [])
 

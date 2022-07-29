@@ -31,6 +31,10 @@ class MainApiRoute {
 	async windowDrive(driveType) {
 		return await window.UserApi.windowDrive(driveType)
 	}
+
+	async deleteItem(args) {
+		return await window.UserApi.deleteItem(args)
+	}
 }
 
 export default new MainApiRoute()

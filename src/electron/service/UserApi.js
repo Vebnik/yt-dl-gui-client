@@ -169,6 +169,31 @@ var UserApi = /** @class */ (function () {
             });
         });
     };
+    UserApi.prototype.deleteItem = function (args) {
+        return __awaiter(this, void 0, void 0, function () {
+            var Video, err_3;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        _a.trys.push([0, 4, , 5]);
+                        return [4 /*yield*/, DataModel.getVideoModel()];
+                    case 1:
+                        Video = _a.sent();
+                        return [4 /*yield*/, Video.destroy({ where: { url: args } })];
+                    case 2:
+                        _a.sent();
+                        return [4 /*yield*/, Video.sync({ alter: true })];
+                    case 3:
+                        _a.sent();
+                        return [2 /*return*/, { ok: true, message: 'Deleted item' }];
+                    case 4:
+                        err_3 = _a.sent();
+                        return [2 /*return*/, { ok: false, message: err_3 }];
+                    case 5: return [2 /*return*/];
+                }
+            });
+        });
+    };
     return UserApi;
 }());
 exports.default = new UserApi();

@@ -41,6 +41,10 @@ class ApiHandlers{
 		ipcMain.handle('windowDrive', async (event: IpcMainInvokeEvent, args: string) => {
 			return await UserApi.windowDrive(args)
 		})
+
+		ipcMain.handle('deleteItem', async (event: IpcMainInvokeEvent, args: string) => {
+			return await UserApi.deleteItem(args)
+		})
 	}
 }
 

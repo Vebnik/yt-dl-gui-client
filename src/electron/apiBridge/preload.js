@@ -13,4 +13,5 @@ electron_1.contextBridge.exposeInMainWorld('UserApi', {
     getUserConfig: function (args) { return electron_1.ipcRenderer.invoke('getUserConfig', args); },
     childProcExec: function (args) { return electron_1.ipcRenderer.invoke('childProcExec', args); },
     windowDrive: function (args) { return electron_1.ipcRenderer.invoke('windowDrive', args); },
+    deleteItem: function (args) { return electron_1.ipcRenderer.invoke('deleteItem', args); },
 });

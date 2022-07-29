@@ -14,4 +14,5 @@ contextBridge.exposeInMainWorld('UserApi', {
 	getUserConfig: (args: any) => ipcRenderer.invoke('getUserConfig', args),
 	childProcExec: (args: string) => ipcRenderer.invoke('childProcExec', args),
 	windowDrive: (args: string) => ipcRenderer.invoke('windowDrive', args),
+	deleteItem: (args: string) => ipcRenderer.invoke('deleteItem', args),
 })

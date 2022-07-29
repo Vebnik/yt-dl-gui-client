@@ -1,4 +1,14 @@
 {
+  "build": {
+    "productName": "ytdownloader",
+    "appId": "ytdownloader.nik",
+    "win": {
+      "target": "portable"
+    },
+    "directories": {
+      "output": "electron/dist"
+    }
+  },
   "name": "youtube-downloader",
   "version": "0.1.0",
   "private": true,
@@ -30,7 +40,8 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "startElectron": "electron ."
+    "startElectron": "electron .",
+    "build-win": "electron-builder -w"
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -48,6 +59,7 @@
     ]
   },
   "devDependencies": {
-    "electron": "^19.0.9"
+    "electron": "^19.0.9",
+    "electron-builder": "^23.1.0"
   }
 }

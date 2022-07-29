@@ -82,6 +82,18 @@ class UserApi {
 				break
 		}
 	}
+
+	async deleteItem(args: string) {
+		try {
+			const Video = await DataModel.getVideoModel()
+			await Video.destroy({where: {url: args}})
+			await Video.sync({alter: true})
+
+			return {ok: true, message: 'Deleted item'}
+		} catch (err) {
+			return {ok: false, message: err}
+		}
+	}
 }
 
 export default new UserApi()

@@ -58,7 +58,7 @@ const Header = () => {
 	}
 
 	return (
-		<Box w={'100%'} maxW={'800px'} h={'50px'} bg={'gray.700'} my={2} rounded={5}>
+		<Box m={'auto'} w={'100%'} maxW={'800px'} h={'50px'} bg={'gray.700'} my={2} rounded={5}>
 
 			<ModalSpiner showSpinner={showSpinner}/>
 			<ModalSearch onClose={onClose} isOpen={isOpen} config={searchData}/>

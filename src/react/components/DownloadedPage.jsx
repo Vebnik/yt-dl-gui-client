@@ -13,7 +13,7 @@ const DownloadedPage = () => {
 	}, [])
 
 	return (
-		<SimpleGrid position={'relative'} maxW={'1400px'} w={'100%'} p={1} justifyContent={'center'} alignItems={'center'} columns={element.length ? variant : 1} gap={5}>
+		<SimpleGrid m={'auto'} position={'relative'} maxW={'1400px'} w={'100%'} p={1} justifyContent={'center'} alignItems={'center'} columns={element.length ? variant : 1} gap={5}>
 			{
 				element.length
 					? element.map((el, i) => <DownloadModel config={el} key={i}/>)

@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {Box, Icon, Tab, TabList, TabPanel, TabPanels, Tabs} from "@chakra-ui/react";
+import {Box, Icon, ScaleFade, Tab, TabList, TabPanel, TabPanels, Tabs, useDisclosure} from "@chakra-ui/react";
 import Header from "./Header";
 import DownloadedPage from "./DownloadedPage";
 import {FaCogs, FaDownload, FaSave} from "react-icons/all";
@@ -10,6 +10,9 @@ import MainApiRoute from "../service/MainApiRoute";
 const TabsSelector = () => {
 
 	const [element, setElement] = useState([])
+	const [isOpen1, setToggle1] = useState(true)
+	const [isOpen2, setToggle2] = useState(false)
+	const [isOpen3, setToggle3] = useState(false)
 
 	const getAllDownload = () => {
 		MainApiRoute.getHistory().then(results => {
@@ -18,23 +21,35 @@ const TabsSelector = () => {
 		})
 	}
 
+	const frameMotion = () => {
+		setToggle1(false)
+		setToggle2(false)
+		setToggle3(false)
+	}
+
 	return (
 		<Tabs isManual variant='enclosed' w={'100%'} marginTop={3} color={'bisque'}>
 			<TabList>
-				<Tab><Icon as={FaDownload} marginRight={1}/>Download</Tab>
-				<Tab onClick={getAllDownload}><Icon as={FaSave} marginRight={1}/>Saves</Tab>
-				<Tab><Icon as={FaCogs} marginRight={1}/>Setting</Tab>
+				<Tab onClick={() => {frameMotion(); setToggle1(true)}}><Icon as={FaDownload} marginRight={1}/>Download</Tab>
+				<Tab onClick={() => {frameMotion(); setToggle2(true); getAllDownload()}}><Icon as={FaSave} marginRight={1}/>Saves</Tab>
+				<Tab onClick={() => {frameMotion(); setToggle3(true)}}><Icon as={FaCogs} marginRight={1}/>Setting</Tab>
 			</TabList>
 			<TabPanels>
-				<TabPanel justifyContent={'center'} alignItems={'center'} display={'flex'} flexDirection={'column'}>
-					<Header/>
-					<DownloadedPage/>
+				<TabPanel>
+					<ScaleFade in={isOpen1} initialScale={0.8}>
+						<Header/>
+						<DownloadedPage/>
+					</ScaleFade>
 				</TabPanel>
-				<TabPanel justifyContent={'center'} alignItems={'center'} display={'flex'} flexDirection={'column'}>
-					<SavePage getAllDownload={getAllDownload} element={element}/>
+				<TabPanel >
+					<ScaleFade in={isOpen2} initialScale={0.8}>
+						<SavePage getAllDownload={getAllDownload} element={element}/>
+					</ScaleFade>
 				</TabPanel>
 				<TabPanel>
-					<SettingPage/>
+					<ScaleFade in={isOpen3} initialScale={0.8}>
+						<SettingPage/>
+					</ScaleFade>
 				</TabPanel>
 			</TabPanels>
 		</Tabs>

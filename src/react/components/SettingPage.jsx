@@ -1,4 +1,4 @@
-import React, {useContext} from 'react';
+import React, {useContext, useState} from 'react';
 import {Box, Button, Input, InputGroup, InputRightElement, Stack} from "@chakra-ui/react";
 import MainApiRoute from "../service/MainApiRoute";
 import {Context} from "../../index";
@@ -7,10 +7,11 @@ import {observer} from "mobx-react-lite";
 const SettingPage = observer(() => {
 
 	const {store} = useContext(Context)
+	const [path, setPath] = useState('')
 
 	const saveDefPath = () => {
 		MainApiRoute.savePath().then(results => {
-			console.log(results.message[0])
+			setPath(results.message[0])
 			store.setDefPath(results.message[0])
 		})
 	}
@@ -24,7 +25,7 @@ const SettingPage = observer(() => {
 		<Box width={'50%'} m={'auto'} minW={'500px'}>
 			<Stack spacing={3}>
 				<InputGroup size='md'>
-					<Input isDisabled value={store.user.savePath} variant='filled' placeholder='Default save path' />
+					<Input isDisabled value={path || store.user.savePath} variant='filled' placeholder='Default save path' />
 					<InputRightElement width='6.5rem'>
 						<Button mx={1} onClick={saveDefPath} h='1.75rem' size='sm'>Save</Button>
 						<Button onClick={openSaveDefPath} h='1.75rem' size='sm'>Open</Button>

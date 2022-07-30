@@ -105,25 +105,16 @@ var YtApi = /** @class */ (function () {
                                                 var _a;
                                                 return __generator(this, function (_b) {
                                                     switch (_b.label) {
-                                                        case 0: return [4 /*yield*/, Video_1.create({
-                                                                title: videoInfo.videoDetails.title,
-                                                                url: videoInfo.videoDetails.video_url,
-                                                                duration: videoInfo.videoDetails.lengthSeconds,
-                                                                savePath: config_1[0].dataValues.savePath,
-                                                                thumbnail: videoInfo.videoDetails.thumbnails.at(-1).url,
-                                                            })];
-                                                        case 1:
-                                                            _b.sent();
-                                                            return [4 /*yield*/, Video_1.sync({ alter: true })];
-                                                        case 2:
-                                                            _b.sent();
-                                                            if (!(option.filter === 'highest')) return [3 /*break*/, 4];
+                                                        case 0:
+                                                            if (!(option.filter === 'highest')) return [3 /*break*/, 2];
                                                             _a = resolve;
-                                                            return [4 /*yield*/, this.streamDownload(videoInfo, config_1)];
-                                                        case 3:
+                                                            return [4 /*yield*/, this.streamDownload(videoInfo, config_1, Video_1)];
+                                                        case 1:
                                                             _a.apply(void 0, [_b.sent()]);
                                                             return [2 /*return*/];
-                                                        case 4:
+                                                        case 2: return [4 /*yield*/, this.saveVideoModel(videoInfo, Video_1, config_1)];
+                                                        case 3:
+                                                            _b.sent();
                                                             (0, ytdl_core_1.downloadFromInfo)(videoInfo, { quality: option.filter })
                                                                 .pipe(fs.createWriteStream(path.join(config_1[0].dataValues.savePath, videoInfo.videoDetails.title + ".mp4")));
                                                             resolve({ ok: true, message: 'start download' });
@@ -172,7 +163,7 @@ var YtApi = /** @class */ (function () {
             });
         });
     };
-    YtApi.prototype.streamDownload = function (videoInfo, config) {
+    YtApi.prototype.streamDownload = function (videoInfo, config, Video) {
         return __awaiter(this, void 0, void 0, function () {
             var downloadData_1, audio, video, ffmpegMerge, err_3;
             var _this = this;
@@ -184,7 +175,10 @@ var YtApi = /** @class */ (function () {
                             return [2 /*return*/, { ok: false, message: 'Not exist FFmpeg' }];
                         _a.label = 2;
                     case 2:
-                        _a.trys.push([2, 6, , 7]);
+                        _a.trys.push([2, 7, , 8]);
+                        return [4 /*yield*/, this.saveVideoModel(videoInfo, Video, config)];
+                    case 3:
+                        _a.sent();
                         downloadData_1 = {
                             audio: { downloaded: 0, total: 0 },
                             video: { downloaded: 0, total: 0 },
@@ -193,13 +187,13 @@ var YtApi = /** @class */ (function () {
                                 .on('progress', function (_, downloaded, total) {
                                 downloadData_1.audio = { downloaded: downloaded, total: total };
                             })];
-                    case 3:
+                    case 4:
                         audio = _a.sent();
                         return [4 /*yield*/, (0, ytdl_core_1.downloadFromInfo)(videoInfo, { quality: 'highestvideo' })
                                 .on('progress', function (_, downloaded, total) {
                                 downloadData_1.video = { downloaded: downloaded, total: total };
                             })];
-                    case 4:
+                    case 5:
                         video = _a.sent();
                         return [4 /*yield*/, cp.spawn('ffmpeg', [
                                 '-loglevel', '8', '-hide_banner',
@@ -209,7 +203,7 @@ var YtApi = /** @class */ (function () {
                                 '-map', '0:a',
                                 '-map', '1:v',
                                 '-c:v', 'copy',
-                                path.join(config[0].dataValues.savePath, videoInfo.videoDetails.channelId + ".mkv"),
+                                path.join(config[0].dataValues.savePath, videoInfo.videoDetails.title.replace(/[а-я]/gmi, 'f') + ".mkv"),
                             ], {
                                 windowsHide: true,
                                 stdio: [
@@ -217,7 +211,7 @@ var YtApi = /** @class */ (function () {
                                     'pipe', 'pipe', 'pipe',
                                 ]
                             })];
-                    case 5:
+                    case 6:
                         ffmpegMerge = _a.sent();
                         ffmpegMerge.on('close', function () {
                             _this.processDownload.delete(videoInfo.videoDetails.video_url);
@@ -245,10 +239,10 @@ var YtApi = /** @class */ (function () {
                         audio.pipe(ffmpegMerge.stdio[4]);
                         video.pipe(ffmpegMerge.stdio[5]);
                         return [2 /*return*/, { ok: true, message: 'Start download' }];
-                    case 6:
+                    case 7:
                         err_3 = _a.sent();
                         return [2 /*return*/, { ok: false, message: err_3 }];
-                    case 7: return [2 /*return*/];
+                    case 8: return [2 /*return*/];
                 }
             });
         });
@@ -275,6 +269,27 @@ var YtApi = /** @class */ (function () {
                     case 1:
                         _a.sent();
                         return [2 /*return*/, check];
+                }
+            });
+        });
+    };
+    YtApi.prototype.saveVideoModel = function (videoInfo, Video, config) {
+        return __awaiter(this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, Video.create({
+                            title: videoInfo.videoDetails.title,
+                            url: videoInfo.videoDetails.video_url,
+                            duration: videoInfo.videoDetails.lengthSeconds,
+                            savePath: config[0].dataValues.savePath,
+                            thumbnail: videoInfo.videoDetails.thumbnails.at(-1).url,
+                        })];
+                    case 1:
+                        _a.sent();
+                        return [4 /*yield*/, Video.sync({ alter: true })];
+                    case 2:
+                        _a.sent();
+                        return [2 /*return*/];
                 }
             });
         });

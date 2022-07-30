@@ -76,7 +76,7 @@ class UserApi {
 		switch (driveType) {
 			case 'minimize': win.minimize()
 				break
-			case 'maximize': win.maximize()
+			case 'maximize': win.isMaximized() ? win.unmaximize() : win.maximize()
 				break
 			case 'close': win.close()
 				break

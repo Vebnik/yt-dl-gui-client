@@ -44,19 +44,12 @@ class YtApi {
 
 				await getInfo(option.url).then(async videoInfo => {
 
-					await Video.create({
-						title: videoInfo.videoDetails.title,
-						url: videoInfo.videoDetails.video_url,
-						duration: videoInfo.videoDetails.lengthSeconds,
-						savePath: config[0].dataValues.savePath,
-						thumbnail: videoInfo.videoDetails.thumbnails.at(-1).url,
-					})
-					await Video.sync({alter: true})
-
 					if (option.filter === 'highest') {
-						resolve(await this.streamDownload(videoInfo, config))
+						resolve(await this.streamDownload(videoInfo, config, Video))
 						return;
 					}
+
+					await this.saveVideoModel(videoInfo, Video, config)
 
 					downloadFromInfo(videoInfo, {quality: option.filter})
 						.pipe(fs.createWriteStream(path.join(config[0].dataValues.savePath,`${videoInfo.videoDetails.title}.mp4`)))
@@ -89,12 +82,15 @@ class YtApi {
 
 	private processDownload: Map<string, object> = new Map()
 
-	private async streamDownload(videoInfo: videoInfo, config) {
+	private async streamDownload(videoInfo: videoInfo, config, Video) {
 
 		if (!(await this.checkFFmpeg()))
 			return {ok: false, message: 'Not exist FFmpeg'}
 
 		try {
+
+			await this.saveVideoModel(videoInfo, Video, config)
+
 			const downloadData = {
 				audio: {downloaded: 0, total: 0},
 				video: {downloaded: 0, total: 0},
@@ -118,7 +114,7 @@ class YtApi {
 				'-map', '0:a',
 				'-map', '1:v',
 				'-c:v', 'copy',
-				path.join(config[0].dataValues.savePath,`${videoInfo.videoDetails.channelId}.mkv`),
+				path.join(config[0].dataValues.savePath,`${videoInfo.videoDetails.title.replace(/[а-я]/gmi, 'f')}.mkv`),
 			], {
 				windowsHide: true,
 				stdio: [
@@ -178,6 +174,19 @@ class YtApi {
 
 		await Promise.all([check])
 		return check
+	}
+
+	private async saveVideoModel(videoInfo: videoInfo, Video, config) {
+
+		await Video.create({
+			title: videoInfo.videoDetails.title,
+			url: videoInfo.videoDetails.video_url,
+			duration: videoInfo.videoDetails.lengthSeconds,
+			savePath: config[0].dataValues.savePath,
+			thumbnail: videoInfo.videoDetails.thumbnails.at(-1).url,
+		})
+		await Video.sync({alter: true})
+
 	}
 
 }

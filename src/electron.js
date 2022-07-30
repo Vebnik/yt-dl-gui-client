@@ -21,8 +21,8 @@ var startElectron = function () {
             titleBarStyle: 'hidden'
         };
         new electron_1.BrowserWindow(winOptions)
-            //.loadURL('http://localhost:3000').catch(err => console.error(err))
-            .loadFile(path.join('index.html'));
+            .loadURL('http://localhost:3000').catch(function (err) { return console.error(err); });
+        //.loadFile(path.join('index.html'))
     };
     electron_1.app.on('ready', function () { return createWindow(); });
     electron_1.app.once('ready', function () { apiHandlers_1.default.ytApiHandlers(); apiHandlers_1.default.userApiHandlers(); });

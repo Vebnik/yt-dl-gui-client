@@ -159,7 +159,7 @@ var UserApi = /** @class */ (function () {
                         win.minimize();
                         break;
                     case 'maximize':
-                        win.maximize();
+                        win.isMaximized() ? win.unmaximize() : win.maximize();
                         break;
                     case 'close':
                         win.close();

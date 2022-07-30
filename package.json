@@ -5,15 +5,13 @@
     "win": {
       "target": "portable"
     },
-    "directories": {
-      "output": "electron/dist"
-    }
+    "extends": null
   },
   "name": "youtube-downloader",
   "version": "0.1.0",
   "private": true,
   "homepage": ".",
-  "main": "src/electronIndex.js",
+  "main": "src/electron.js",
   "dependencies": {
     "@chakra-ui/react": "^2.2.4",
     "@emotion/react": "^11.9.3",
@@ -41,7 +39,7 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "startElectron": "electron .",
-    "build-win": "electron-builder -w"
+    "build-win": "electron-builder --dir"
   },
   "eslintConfig": {
     "extends": "react-app"

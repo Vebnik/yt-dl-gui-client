@@ -16,7 +16,8 @@ const startElectron = () => {
 			webPreferences: {
 				devTools: true,
 				contextIsolation: true,
-				preload: path.join(__dirname, 'electron', 'apiBridge', 'preload.js')
+				preload: path.join(__dirname, 'electron', 'apiBridge', 'preload.js'),
+				webSecurity: false
 			},
 			titleBarOverlay: false,
 			autoHideMenuBar: true,
@@ -24,7 +25,8 @@ const startElectron = () => {
 		}
 
 		new BrowserWindow(winOptions)
-			.loadURL('http://localhost:3000').catch(err => console.error(err))
+			//.loadURL('http://localhost:3000').catch(err => console.error(err))
+			.loadFile(path.join('index.html'))
 
 	}
 

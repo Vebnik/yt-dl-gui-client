@@ -22,7 +22,7 @@ const ModalSearch = ({isOpen, onClose, config}) => {
 	const [filter, setFilter] = useState('audioAndVideo')
 	const createAlert = (status, description) => {
 		toast({
-			title: 'Warning',
+			title: 'Info',
 			description: description,
 			status: status,
 			duration: 2000,

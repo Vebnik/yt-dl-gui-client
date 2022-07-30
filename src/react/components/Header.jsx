@@ -26,7 +26,7 @@ const Header = () => {
 
 	const createAlert = (status, description) => {
 		toast({
-			title: 'Warning',
+			title: 'Info',
 			description: description,
 			status: status,
 			duration: 2000,

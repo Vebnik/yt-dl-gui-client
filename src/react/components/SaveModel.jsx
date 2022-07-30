@@ -8,7 +8,7 @@ const SaveModel = ({config, getAllDownload}) => {
 	const toast = useToast()
 	const createAlert = (status, description) => {
 		toast({
-			title: 'Warning',
+			title: 'Info',
 			description: description,
 			status: status,
 			duration: 2000,

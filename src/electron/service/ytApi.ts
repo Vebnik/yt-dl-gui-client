@@ -5,7 +5,6 @@ import * as fs from "fs"
 import * as path from "path"
 import * as cp from 'child_process'
 const dayjs = require('dayjs')
-const ffmpeg = require('ffmpeg-static')
 const DataModel = require("../database/dataModel")
 
 
@@ -55,8 +54,8 @@ class YtApi {
 					await Video.sync({alter: true})
 
 					if (option.filter === 'highest') {
-						resolve({ok: true, message: 'start download'})
-						return this.streamDownload(videoInfo, config)
+						resolve(await this.streamDownload(videoInfo, config))
+						return;
 					}
 
 					downloadFromInfo(videoInfo, {quality: option.filter})
@@ -84,7 +83,6 @@ class YtApi {
 			return {ok: false, message: err}
 		}
 
-
 	}
 
 	// Private
@@ -93,25 +91,26 @@ class YtApi {
 
 	private async streamDownload(videoInfo: videoInfo, config) {
 
+		if (!(await this.checkFFmpeg()))
+			return {ok: false, message: 'Not exist FFmpeg'}
+
 		try {
 			const downloadData = {
 				audio: {downloaded: 0, total: 0},
 				video: {downloaded: 0, total: 0},
 			}
 
-			console.log(path.join(config[0].dataValues.savePath,`${videoInfo.videoDetails.title}.mkv`))
-
-			const audio = downloadFromInfo(videoInfo, {quality: 'highestaudio'})
+			const audio = await downloadFromInfo(videoInfo, {quality: 'highestaudio'})
 				.on('progress', (_, downloaded, total) => {
 					downloadData.audio = {downloaded, total}
 				})
 
-			const video = downloadFromInfo(videoInfo, {quality: 'highestvideo'})
+			const video = await downloadFromInfo(videoInfo, {quality: 'highestvideo'})
 				.on('progress', (_, downloaded, total) => {
 					downloadData.video = {downloaded, total}
 				})
 
-			const ffmpegMerge = cp.spawn(ffmpeg, [
+			const ffmpegMerge = await cp.spawn('ffmpeg', [
 				'-loglevel', '8', '-hide_banner',
 				'-progress', 'pipe:3',
 				'-i', 'pipe:4',
@@ -162,11 +161,23 @@ class YtApi {
 
 			audio.pipe(ffmpegMerge.stdio[4])
 			video.pipe(ffmpegMerge.stdio[5])
+
+			return {ok: true, message: 'Start download'}
 		}
 		catch (err) {
 			return {ok: false, message: err}
 		}
 
+	}
+
+	private async checkFFmpeg() {
+		const check = new Promise(async (resolve) => {
+			await cp.spawn('ffmpeg').on('error', (err) => resolve(false))
+			setTimeout(() => resolve(true), 1000)
+		})
+
+		await Promise.all([check])
+		return check
 	}
 
 }

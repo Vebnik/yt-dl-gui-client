@@ -5,6 +5,7 @@
     "win": {
       "target": "portable"
     },
+    "icon": "favicon.png",
     "extends": null
   },
   "name": "youtube-downloader",

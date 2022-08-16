@@ -1,5 +1,5 @@
 import { dialog, app, BrowserWindow } from 'electron'
-import {Model} from "sequelize";
+import {Model} from "sequelize/types"
 const DataModel = require("../database/dataModel");
 import * as child_process from "child_process";
 

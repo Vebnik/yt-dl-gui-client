@@ -4,8 +4,6 @@ import MainApiRoute from "../service/MainApiRoute";
 import DownloadModel from "./DownloadModel";
 import SaveModel from "./SaveModel";
 
-// TODO Подгрузка списка скаченых видео при клике по вкладкам и работа с кнопками контроля окна
-
 const SavePage = ({element, getAllDownload}) => {
 
 	const variant = useBreakpointValue({ base: 1, md: 2 })

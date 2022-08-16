@@ -1,10 +1,7 @@
 import React from 'react';
-import {Avatar, Badge, Box, Icon, IconButton, Image, Progress, SimpleGrid, Text, Wrap} from "@chakra-ui/react";
+import {Badge, Box, Icon, IconButton, Image, Progress, Text, Wrap} from "@chakra-ui/react";
 import {FaYoutube} from "react-icons/all";
 import MainApiRoute from "../service/MainApiRoute";
-
-
-//TODO Потоковое скчивание видео и аудио отдельно для объеленения через ffmpeg - https://github.com/fent/node-ytdl-core/blob/HEAD/example/ffmpeg.js
 
 const DownloadModel = ({config}) => {
 

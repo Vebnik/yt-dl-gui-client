@@ -16,7 +16,6 @@ const TabsSelector = () => {
 
 	const getAllDownload = () => {
 		MainApiRoute.getHistory().then(results => {
-			console.log(results)
 			setElement(results.message)
 		})
 	}

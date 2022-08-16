@@ -42,9 +42,6 @@
     "startElectron": "electron .",
     "build-win": "electron-builder --dir"
   },
-  "eslintConfig": {
-    "extends": "react-app"
-  },
   "browserslist": {
     "production": [
       ">0.2%",
